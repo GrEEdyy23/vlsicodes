@@ -1,0 +1,71 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+---- Uncomment the following library declaration if instantiating
+---- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity keypad is
+    Port ( clk : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+           row : in  STD_LOGIC_VECTOR (3 downto 0);
+           column : out  STD_LOGIC_VECTOR (3 downto 0);
+           data : out  STD_LOGIC_VECTOR (3 downto 0));
+end keypad;
+
+architecture Behavioral of keypad is
+type state is (c01,c02,c03,c04);
+signal coltest:state:=c01;
+begin
+process (clk,rst)
+begin
+if rst='1'then
+coltest<=c01;
+column<="1110";
+data<="0001";
+elsif clk'event and clk='1' then
+case coltest is
+when c01=>column<="1110";
+case row is
+when"1110"=>data<="0001";
+when"1101"=>data<="0100";
+when"1011"=>data<="0111";
+when"0111"=>data<="1010";
+when others=>coltest<=c02;
+column<="1101";
+end case;
+when c02=>column<="1101";
+case row is
+when"1110"=>data<="0101";
+when"1101"=>data<="1000";
+when"1011"=>data<="1000";
+when"0111"=>data<="0000";
+when others=>coltest<=c03;
+column<="1011";
+end case;
+when c03=>column<="1011";
+case row is
+when"1110"=>data<="0011";
+when"1101"=>data<="0110";
+when"1011"=>data<="1001";
+when"0111"=>data<="1011";
+when others=>coltest<=c04;
+column<="0111";
+end case;
+when c04=>column<="0111";
+case row is
+when"1110"=>data<="1100";
+when"1101"=>data<="1101";
+when"1011"=>data<="1110";
+when"0111"=>data<="1111";
+when others=>coltest<=c01;
+column<="1110";
+end case;
+end case;
+end if;
+end process;
+end Behavioral;
+
