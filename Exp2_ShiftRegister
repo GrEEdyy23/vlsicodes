@@ -1,0 +1,40 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+---- Uncomment the following library declaration if instantiating
+---- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity Exp2 is
+Port ( Q: inout  STD_LOGIC_VECTOR (03 downto 0);
+           D : in  STD_LOGIC_VECTOR (03 downto 0);
+           m : in  STD_LOGIC_VECTOR (01 downto 0);
+           clk,rst : in  STD_LOGIC);
+end Exp2;
+
+architecture Behavioral of Exp2 is
+
+begin
+process(clk,rst)
+begin
+if rst = '1' then
+Q<="0000";
+elsif clk'event and clk='1' then
+case m is
+when "00"=>
+         Q<=D;
+when "01"=>
+         Q<=Q(2 downto 0)& D(0);
+when "10"=>
+         Q<=D(3) & Q(3 downto 1);
+when others=>
+         Q<="0000";
+end case;
+end if;
+end process;
+
+end Behavioral;
+
