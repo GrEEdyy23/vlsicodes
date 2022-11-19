@@ -1,0 +1,74 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.std_logic_unsigned.all;
+USE ieee.numeric_std.ALL;
+
+ENTITY fifo_tb_vhd IS
+END fifo_tb_vhd;
+
+ARCHITECTURE behavior OF fifo_tb_vhd IS 
+
+	-- Component Declaration for the Unit Under Test (UUT)
+	COMPONENT fifo
+	PORT(
+		clk : IN std_logic;
+		en : IN std_logic;
+		din : IN std_logic_vector(7 downto 0);          
+		full : OUT std_logic;
+		empty : OUT std_logic;
+		dout : OUT std_logic_vector(7 downto 0)
+		);
+	END COMPONENT;
+
+	--Inputs
+	SIGNAL clk :  std_logic := '0';
+	SIGNAL en :  std_logic := '0';
+	SIGNAL din :  std_logic_vector(7 downto 0) := (others=>'0');
+
+	--Outputs
+	SIGNAL full :  std_logic;
+	SIGNAL empty :  std_logic;
+	SIGNAL dout :  std_logic_vector(7 downto 0);
+
+BEGIN
+
+	-- Instantiate the Unit Under Test (UUT)
+	uut: fifo PORT MAP(
+		clk => clk,
+		en => en,
+		din => din,
+		full => full,
+		empty => empty,
+		dout => dout
+	);
+	process
+	begin
+	clk<='0';
+	wait for 25 ns;
+	clk<='1';
+	wait for 25 ns;
+	end process;
+	
+
+	tb : PROCESS
+	BEGIN
+
+		-- Wait 100 ns for global reset to finish
+		--wait for 100 ns;
+
+	en<='1';
+	
+	din<="00001111";
+	wait for 100 ns;
+	din<="00110011";
+	wait for 100 ns;
+	din<="01010101";
+	wait for 100 ns;
+	din<="10101010";
+	wait for 100 ns;
+	en<='0';
+	
+		wait; -- will wait forever
+	END PROCESS;
+
+END;
