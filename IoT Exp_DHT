@@ -1,0 +1,19 @@
+#include "DHT.h"
+#define DHTPIN 2
+#define DHTTYPE DHT11
+DHT dht(DHTPIN, DHTTYPE);
+void setup() {
+Serial.begin(9600);
+Serial.println(F("Welcome to AISSMS IOIT"));
+dht.begin();
+}
+void loop()
+{
+float h = dht.readHumidity();
+float t = dht.readTemperature();
+Serial.println(F(" Humidity: "));
+Serial.println(h);
+Serial.println(F("% Temperature: "));
+Serial.println(t);
+delay(2000);
+}
