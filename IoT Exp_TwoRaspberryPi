@@ -1,0 +1,100 @@
+import time
+import serial
+TRUE = 1
+print "Starting program"
+ser = serial.Serial('/dev/serial0', baudrate=9600,
+parity=serial.PARITY_NONE,
+stopbits=serial.STOPBITS_ONE,
+bytesize=serial.EIGHTBITS
+)
+time.sleep(1)
+def xbeestring(str,cnt):
+ser.write(str)
+time.sleep(1)
+return ser.read(cnt)
+try:
+print 'MicroEmbedded Zigbee Program'
+print '\nenter command mode'
+data = xbeestring('+++',0)
+print data
+time.sleep(3)
+print '\nAttention:'
+data = xbeestring('AT\r\n',2)
+print data
+time.sleep(3)
+print '\nset PAN ID to 10'
+data = xbeestring('ATID 10\r\n',2)
+# print data
+time.sleep(3)
+print '\nexit command mode'
+data = xbeestring('ATCN\r\n',2)
+# print data
+time.sleep(1)
+print '\nreceiving data over zigbee'
+while TRUE:
+data = ser.read()
+print data
+time.sleep(0.1)
+except KeyboardInterrupt:
+print "Exiting Program"
+except:
+print "Error Occurs, Exiting Program"
+finally:
+ser.close()
+pass
+
+
+
+
+
+
+
+Code for Zigbee tx:
+import time
+import serial
+TRUE = 1
+print "Starting program"
+ser = serial.Serial('/dev/serial0', baudrate=9600,
+parity=serial.PARITY_NONE,
+stopbits=serial.STOPBITS_ONE,
+bytesize=serial.EIGHTBITS
+)
+time.sleep(1)
+def xbeestring(str,cnt):
+ser.write(str)
+return ser.read(cnt)
+try:
+print 'MicroEmbedded Zigbee Program'
+data = xbeestring('+++',0)
+print data
+time.sleep(3)
+data = xbeestring('AT\r\n',2)
+print data
+time.sleep(3)
+data = xbeestring('ATID 10\r\n',2)
+print data
+time.sleep(3)
+data = xbeestring('ATCN\r\n',2)
+print data
+time.sleep(1)
+print 'sending data'
+while TRUE:
+data = xbeestring('\r\n',0)
+time.sleep(1)
+data = xbeestring(' 0',0)
+time.sleep(1)
+data = xbeestring(' 1',0)
+time.sleep(1)
+data = xbeestring(' 2',0)
+time.sleep(1)
+data = xbeestring(' 3',0)
+time.sleep(1)
+data = xbeestring(' 4',0)
+time.sleep(1)
+except KeyboardInterrupt:
+print "Exiting Program"
+except:
+print "Error Occurs, Exiting Program"
+finally:
+ser.close()
+pass
